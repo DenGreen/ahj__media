@@ -23,7 +23,11 @@ export default class Controller {
     this.popappForm = document.querySelector(".popapp__form");
     this.popappBtnCancel = document.querySelector('.popapp__btn-cancel');
     this.popappError = null;
-    this.nav = navigator.mediaDevices.getUserMedia(
+    this.nav();
+  }
+
+  nav() {
+    navigator.mediaDevices.getUserMedia(
       { audio: true, video: true }
     );
   }
