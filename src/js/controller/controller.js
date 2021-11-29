@@ -26,8 +26,8 @@ export default class Controller {
     this.nav();
   }
 
-  nav() {
-    navigator.mediaDevices.getUserMedia(
+  async nav() {
+    await navigator.mediaDevices.getUserMedia(
       { audio: true, video: true }
     );
   }
