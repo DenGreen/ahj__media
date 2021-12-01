@@ -32,15 +32,15 @@ export default class Controller {
     );
   }
 
-  init() {
+  async init() {
     this.enteringGeoPosition().then((value) => {
       this.checkingCoordinatesOne(value);
     });
+
     this.timelineAudioButton.addEventListener("mousedown", (e) => {
       const idAudio = this.view.recordAudio(this.cor);
       const postAudio = document.querySelector(idAudio);
       this.mediaAudioPost(postAudio);
-      console.log();
       console.log(`start audio ${idAudio}`);
     });
 
