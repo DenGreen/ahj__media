@@ -32,11 +32,10 @@ export default class Controller {
     );
   }
 
-  async init() {
-    await this.enteringGeoPosition().then((value) => {
-      this.checkingCoordinates(value);
+  init() {
+    this.enteringGeoPosition().then((value) => {
+      this.checkingCoordinatesOne(value);
     });
-
     this.timelineAudioButton.addEventListener("mousedown", (e) => {
       const idAudio = this.view.recordAudio(this.cor);
       const postAudio = document.querySelector(idAudio);
@@ -66,14 +65,15 @@ export default class Controller {
 
     this.timelineForm.addEventListener("submit", (e) => {
       e.preventDefault();
-      this.view.recordText(this.timelineInput.value, this.cor);
-      this.timelineInput.value = "";
+      this.enteringGeoPosition().then((value) => {
+        this.checkingCoordinates(value);
+      });
     });
 
-    this.popappForm.addEventListener("submit", (e) => {
+    this.popappForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       const popappInputValue = this.popappInput.value;
-      this.validationPopappError(popappInputValue);
+      await this.validationPopappError(popappInputValue);
     });
 
     this.popappInput.addEventListener('input', ()=>{
@@ -81,8 +81,10 @@ export default class Controller {
     })
 
     this.popappBtnCancel.addEventListener('click', () => {
-      this.view.popappError(this.popapp);
+      this.view.popappErrorAdd(this.popapp);
       this.cor = { latitude: 0, longitude: 0 };
+      this.view.recordText(this.timelineInput.value, this.cor);
+      this.timelineInput.value = "";
     })
   }
 
@@ -110,15 +112,21 @@ export default class Controller {
     });
   }
 
+  checkingCoordinatesOne(cor) {
+    this.cor = cor;
+  }
+
   checkingCoordinates(cor) {
     if (cor.error) {
-      this.view.popappError(this.popapp);
+      this.view.popappErrorRemove(this.popapp);
     } else {
+      this.view.recordText(this.timelineInput.value, cor);
+      this.timelineInput.value = "";
       this.cor = cor;
     }
   }
 
-  validationPopappError(popappInputValue) {
+  async validationPopappError(popappInputValue) {
     const regular = this.validatorPattern(popappInputValue);
 
     if (regular) {
@@ -128,7 +136,9 @@ export default class Controller {
       const longitude = /[0-9]{1,2}\.[0-9]+/.exec(long[0]);
 
       this.cor = {latitude: latitude[0], longitude: longitude[0]};
-      this.view.popappError(this.popapp);
+      this.view.popappErrorAdd(this.popapp);
+      this.view.recordText(this.timelineInput.value, this.cor);
+      this.timelineInput.value = "";
     } else {
       this.view.messageError(this.popappInput);
       this.popappError = document.querySelector('.popapp__error');

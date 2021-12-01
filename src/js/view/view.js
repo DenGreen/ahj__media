@@ -45,14 +45,13 @@ export default class View {
     console.log("Введите координаты");
   }
 
-  popappError(popapp) {
-      if(popapp.classList.contains("popapp--hidden")) {
-        popapp.classList.remove("popapp--hidden");
-      } else {
+  popappErrorAdd(popapp) {
         popapp.classList.add("popapp--hidden");
-      }
-    
   }
+
+  popappErrorRemove(popapp) {
+      popapp.classList.remove("popapp--hidden");
+}
 
   messageError(input) {
     input.insertAdjacentHTML(
