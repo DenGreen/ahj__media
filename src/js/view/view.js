@@ -12,7 +12,7 @@ export default class View {
       `<div class="timeline__post">
                 <span class="timline__data-time">${this.recordData()}</span>
                 ${value}
-                <span class="timeline__coordinates">[${latitude}, -${longitude}]</span>
+                <span class="timeline__coordinates">[${latitude}, ${longitude}]</span>
              </div>`
     );
   }

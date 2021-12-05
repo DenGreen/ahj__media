@@ -66,6 +66,7 @@
 }
 
 .popapp {
+  background-color: white;
   position: absolute;
   top: 150px;
   right: 60px;

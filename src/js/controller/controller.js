@@ -21,15 +21,13 @@ export default class Controller {
     this.poppapBtnOk = document.querySelector(".poppap__btn-ok");
     this.popappInput = document.querySelector(".popapp__input");
     this.popappForm = document.querySelector(".popapp__form");
-    this.popappBtnCancel = document.querySelector('.popapp__btn-cancel');
+    this.popappBtnCancel = document.querySelector(".popapp__btn-cancel");
     this.popappError = null;
     this.nav();
   }
 
   async nav() {
-    await navigator.mediaDevices.getUserMedia(
-      { audio: true, video: true }
-    );
+    await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
   }
 
   async init() {
@@ -76,16 +74,16 @@ export default class Controller {
       await this.validationPopappError(popappInputValue);
     });
 
-    this.popappInput.addEventListener('input', ()=>{
-      if(this.popappError) this.popappError.remove();
-    })
+    this.popappInput.addEventListener("input", () => {
+      if (this.popappError) this.popappError.remove();
+    });
 
-    this.popappBtnCancel.addEventListener('click', () => {
+    this.popappBtnCancel.addEventListener("click", () => {
       this.view.popappErrorAdd(this.popapp);
       this.cor = { latitude: 0, longitude: 0 };
       this.view.recordText(this.timelineInput.value, this.cor);
       this.timelineInput.value = "";
-    })
+    });
   }
 
   async mediaAudioPost(post) {
@@ -130,24 +128,25 @@ export default class Controller {
     const regular = this.validatorPattern(popappInputValue);
 
     if (regular) {
-      const lat = /[0-9]{1,2}\.[0-9]+?,(\s)?/.exec(popappInputValue);
-      const long = /[-|−][0-9]{1,2}\.[0-9]+/.exec(popappInputValue);
-      const latitude = /[0-9]{1,2}\.[0-9]+/.exec(lat[0]);
-      const longitude = /[0-9]{1,2}\.[0-9]+/.exec(long[0]);
-
-      this.cor = {latitude: latitude[0], longitude: longitude[0]};
+      const arr = popappInputValue.split(",");
+      const lat = arr[0].replace("[", "");
+      const long = arr[1].replace("]", "");
+      this.cor = { latitude: lat, longitude: long };
       this.view.popappErrorAdd(this.popapp);
       this.view.recordText(this.timelineInput.value, this.cor);
       this.timelineInput.value = "";
     } else {
       this.view.messageError(this.popappInput);
-      this.popappError = document.querySelector('.popapp__error');
+      this.popappError = document.querySelector(".popapp__error");
     }
   }
 
   validatorPattern(popappInputValue) {
-    const regular = /(^\[((:*[0-9]{1,2}\.[0-9]+?,(\s)?[-|−][0-9]{1,2}\.[0-9]+))\]$)|(^([0-9]{1,2}\.[0-9]+?,(\s)?[-|−][0-9]{1,2}\.[0-9]+)$)/;
-    return regular.test(popappInputValue)
+    /*     const regular =
+      /(^\[((:*[0-9]{1,2}\.[0-9]+?,(\s)?[-|−][0-9]{1,2}\.[0-9]+))\]$)|(^([0-9]{1,2}\.[0-9]+?,(\s)?[-|−][0-9]{1,2}\.[0-9]+)$)/; */
+    const regular =
+      /(^\[((:*[0-9]{1,2}\.[0-9]+?,(\s)?[-|−][0-9]{1,2}\.[0-9]+))\]$)|(^([0-9]{1,2}\.[0-9]+?,(\s)?[-|−][0-9]{1,2}\.[0-9]+)$)|(^\[([-|−](:*[0-9]{1,2}\.[0-9]+?,(\s)?[0-9]{1,2}\.[0-9]+))\]$)|(^\[([-|−](:*[0-9]{1,2}\.[0-9]+?,(\s)?[-|−][0-9]{1,2}\.[0-9]+))\]$)|(^([-|−][0-9]{1,2}\.[0-9]+?,(\s)?[0-9]{1,2}\.[0-9]+)$)|(^([-|−][0-9]{1,2}\.[0-9]+?,(\s)?[-|−][0-9]{1,2}\.[0-9]+)$)|(^([0-9]{1,2}\.[0-9]+?,(\s)?[0-9]{1,2}\.[0-9]+)$)|(^\[((:*[0-9]{1,2}\.[0-9]+?,(\s)?[0-9]{1,2}\.[0-9]+))\]$)/;
+    return regular.test(popappInputValue);
   }
 }
 
